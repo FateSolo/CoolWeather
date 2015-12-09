@@ -101,7 +101,7 @@ public class CoolWeatherDB {
     }
 
     public void saveCounty(County county) {
-        if(county != null) {
+        if (county != null) {
             ContentValues values = new ContentValues();
 
             values.put("county_name", county.getCountyName());
@@ -116,7 +116,7 @@ public class CoolWeatherDB {
         List<County> list = new ArrayList<>();
         Cursor cursor = db.query("County", null, "city_id = ?", new String[]{String.valueOf(cityId)}, null, null, null);
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 County county = new County();
 
