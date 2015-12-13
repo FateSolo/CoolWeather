@@ -1,11 +1,21 @@
 package com.fatesolo.coolweather.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.fatesolo.coolweather.db.CoolWeatherDB;
 import com.fatesolo.coolweather.model.City;
 import com.fatesolo.coolweather.model.County;
 import com.fatesolo.coolweather.model.Province;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Utility {
 
@@ -66,6 +76,27 @@ public class Utility {
             return true;
         }
         return false;
+    }
+
+    public static void handleWeatherResponse(Context context, String response) {
+        try {
+            JSONObject weatherInfo = new JSONObject(response).getJSONObject("weatherinfo");
+
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+
+            editor.putBoolean("city_selected", true);
+            editor.putString("city_name", weatherInfo.getString("city"));
+            editor.putString("weather_code", weatherInfo.getString("cityid"));
+            editor.putString("temp1", weatherInfo.getString("temp1"));
+            editor.putString("temp2", weatherInfo.getString("temp2"));
+            editor.putString("weather_desp", weatherInfo.getString("weather"));
+            editor.putString("publish_time", weatherInfo.getString("ptime"));
+            editor.putString("current_date", new SimpleDateFormat("yyyy年M月d日", Locale.CHINA).format(new Date()));
+
+            editor.apply();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }
