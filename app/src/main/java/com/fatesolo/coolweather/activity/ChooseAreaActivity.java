@@ -3,7 +3,6 @@ package com.fatesolo.coolweather.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -50,14 +49,15 @@ public class ChooseAreaActivity extends Activity {
     private City selectedCity;
 
     private int currentLevel;
+    private boolean isFromWeatherActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
 
-        if (prefs.getBoolean("city_selected", false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("city_selected", false) && !isFromWeatherActivity) {
             Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);
 
@@ -88,7 +88,7 @@ public class ChooseAreaActivity extends Activity {
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
                     Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
-                    intent.putExtra("county_code", prefs.getString("weather_code", ""));
+                    intent.putExtra("county_code", countyList.get(position).getCountyCode());
                     startActivity(intent);
 
                     finish();
@@ -233,6 +233,11 @@ public class ChooseAreaActivity extends Activity {
         } else if (currentLevel == LEVEL_CITY) {
             queryProvinces();
         } else if (currentLevel == LEVEL_PROVINCE) {
+            if (isFromWeatherActivity) {
+                Intent intent = new Intent(this, WeatherActivity.class);
+                startActivity(intent);
+            }
+
             finish();
         }
     }
