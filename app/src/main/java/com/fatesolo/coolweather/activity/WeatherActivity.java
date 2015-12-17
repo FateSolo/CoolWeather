@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fatesolo.coolweather.R;
+import com.fatesolo.coolweather.service.AutoUpdateService;
 import com.fatesolo.coolweather.util.HttpCallbackListener;
 import com.fatesolo.coolweather.util.HttpUtil;
 import com.fatesolo.coolweather.util.Utility;
@@ -141,6 +142,9 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
         weatherInfoLayout.setVisibility(View.VISIBLE);
         cityNameText.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
 }
