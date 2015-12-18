@@ -28,7 +28,7 @@ public class AutoUpdateService extends Service {
             public void run() {
                 updateWeather();
             }
-        });
+        }).start();
 
         int anHour = 8 * 60 * 60 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
